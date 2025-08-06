@@ -30,6 +30,10 @@ public class Warehouse {
     @Column(nullable = false, length = 200)
     private String location;
 
+    @ManyToOne
+    @JoinColumn(name = "country_id", nullable = false)
+    private Country country;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

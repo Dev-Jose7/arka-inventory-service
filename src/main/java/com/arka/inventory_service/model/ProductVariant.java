@@ -39,6 +39,10 @@ public class ProductVariant {
     @JoinColumn(name = "warehouse_id", nullable = false)
     private Warehouse warehouse;
 
+    @ManyToOne
+    @JoinColumn(name = "currency_id", nullable = false)
+    private Currency currency;
+
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
