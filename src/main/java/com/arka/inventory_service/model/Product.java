@@ -1,6 +1,8 @@
 package com.arka.inventory_service.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -11,6 +13,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "product", indexes = @Index(name = "idx_product_name", columnList = "name"))
 public class Product {
 
