@@ -10,6 +10,6 @@ import java.util.UUID;
 @Repository
 public interface StockRepository extends JpaRepository<Stock, UUID> {
     List<Stock> findAllByProductId(UUID productId);
-    List<Stock> findAllByWarehouse(UUID warehouseId);
+    List<Stock> findAllByWarehouseId(UUID warehouseId);
     List<Stock> findAllByStock(Integer stock);
 }
