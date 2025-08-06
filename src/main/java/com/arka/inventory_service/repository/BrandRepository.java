@@ -9,6 +9,6 @@ import java.util.UUID;
 
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, UUID>{
-    Optional<Brand> findByNameIgnoreCase(String name);
     boolean existsByNameIgnoreCase(String name);
+    Optional<Brand> findByNameIgnoreCase(String name);
 }
