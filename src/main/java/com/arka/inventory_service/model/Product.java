@@ -15,7 +15,15 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@Table(name = "product", indexes = @Index(name = "idx_product_name", columnList = "name"))
+@Table(
+        name = "product",
+        indexes = {
+                @Index(name = "idx_product_name", columnList = "name")
+        },
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_product_name_brand", columnNames = {"name", "brand_id"})
+        }
+)
 public class Product {
 
     @Id
