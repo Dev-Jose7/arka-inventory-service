@@ -16,7 +16,12 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@Table(name = "product_variant")
+@Table(
+        name = "product_variant",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_variant_name_product", columnNames = {"name", "product_id"})
+        }
+)
 public class ProductVariant {
 
     @Id
@@ -34,10 +39,6 @@ public class ProductVariant {
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
-
-    @ManyToOne
-    @JoinColumn(name = "warehouse_id", nullable = false)
-    private Warehouse warehouse;
 
     @ManyToOne
     @JoinColumn(name = "currency_id", nullable = false)
