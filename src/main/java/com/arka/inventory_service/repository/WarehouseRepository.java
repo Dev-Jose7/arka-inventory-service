@@ -12,6 +12,6 @@ import java.util.UUID;
 public interface WarehouseRepository extends JpaRepository<Warehouse, UUID> {
     boolean existsByNameIgnoreCase(String name);
     Optional<Warehouse> findByNameIgnoreCase(String name);
-    List<Warehouse> findAllByLocationIgnoreCase(String name);
-    List<Warehouse> findAllByCountryId(String id);
+    List<Warehouse> findAllByLocationIgnoreCase(String location);
+    List<Warehouse> findAllByCountryId(UUID id);
 }
