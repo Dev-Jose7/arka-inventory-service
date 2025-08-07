@@ -11,7 +11,8 @@ import java.util.UUID;
 @Repository
 public interface CurrencyRepository extends JpaRepository<Currency, UUID> {
     boolean existsByNameIgnoreCase(String name);
-    Optional<Currency> findByName(String name);
-    Optional<Currency> findByCode(String name);
+    boolean existsByCodeIgnoreCase(String code);
+    Optional<Currency> findByCodeIgnoreCase(String code);
+    Optional<Currency> findByNameIgnoreCase(String name);
     List<Currency> findAllBySymbol(String symbol);
 }
