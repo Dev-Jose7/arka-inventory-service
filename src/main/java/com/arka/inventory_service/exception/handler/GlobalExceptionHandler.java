@@ -1,6 +1,7 @@
 package com.arka.inventory_service.exception.handler;
 
 import com.arka.inventory_service.dto.response.ErrorResponseDTO;
+import com.arka.inventory_service.exception.EmailSendException;
 import com.arka.inventory_service.exception.InvalidTypeException;
 import com.arka.inventory_service.exception.ResourceAlreadyExistsException;
 import com.arka.inventory_service.exception.ResourceNotFoundException;
@@ -42,6 +43,12 @@ public class GlobalExceptionHandler {
                 HttpStatus.CONFLICT,
                 request.getRequestURI()
         );
+    }
+
+    @ExceptionHandler(EmailSendException.class)
+    public ResponseEntity<ErrorResponseDTO> handleEmailSend(EmailSendException ex,
+                                                            HttpServletRequest request) {
+        return createResponse(ex, HttpStatus.CONFLICT, request.getRequestURI());
     }
 
     @ExceptionHandler(Exception.class)
