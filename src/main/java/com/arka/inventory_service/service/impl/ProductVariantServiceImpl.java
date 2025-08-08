@@ -8,6 +8,7 @@ import com.arka.inventory_service.mapper.EntityToDTOMapper;
 import com.arka.inventory_service.model.Currency;
 import com.arka.inventory_service.model.Product;
 import com.arka.inventory_service.model.ProductVariant;
+import com.arka.inventory_service.notification.NotificationService;
 import com.arka.inventory_service.repository.CurrencyRepository;
 import com.arka.inventory_service.repository.ProductRepository;
 import com.arka.inventory_service.repository.ProductVariantRepository;
@@ -27,10 +28,13 @@ public class ProductVariantServiceImpl implements IProductVariantService {
     private final ProductRepository productRepository;
     private final CurrencyRepository currencyRepository;
     private final EntityToDTOMapper mapper;
+    private final NotificationService notificationService;
 
     @Override
     public ProductVariantResponseDTO createProductVariant(ProductVariantRequestDTO request) {
-        return mapper.toDTO(createEntity(request));
+        ProductVariant productVariant = productVariantRepository.save(createEntity(request));
+        notificationService.notifyNewVariant(productVariant);
+        return mapper.toDTO(productVariant);
     }
 
     @Override
@@ -116,11 +120,13 @@ public class ProductVariantServiceImpl implements IProductVariantService {
         variant.setCurrency(getCurrencyByIdOrException(request.getCurrencyId()));
         variant.setPrice(request.getPrice());
 
-        return productVariantRepository.save(variant);
+        return variant;
     }
 
     private List<ProductVariantResponseDTO> createResponseList(List<ProductVariant> variants){
         return variants.stream().map(mapper::toDTO).toList();
     }
+
+
 }
 

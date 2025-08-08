@@ -8,6 +8,7 @@ import com.arka.inventory_service.mapper.EntityToDTOMapper;
 import com.arka.inventory_service.model.Brand;
 import com.arka.inventory_service.model.Category;
 import com.arka.inventory_service.model.Product;
+import com.arka.inventory_service.notification.NotificationService;
 import com.arka.inventory_service.repository.BrandRepository;
 import com.arka.inventory_service.repository.CategoryRepository;
 import com.arka.inventory_service.repository.ProductRepository;
@@ -26,10 +27,13 @@ public class ProductServiceImpl implements IProductService {
     private final BrandRepository brandRepository;
     private final CategoryRepository categoryRepository;
     private final EntityToDTOMapper mapper;
+    private final NotificationService notificationService;
 
     @Override
     public ProductResponseDTO createProduct(ProductRequestDTO request) {
-        return mapper.toDTO(productRepository.save(createEntity(request)));
+        Product product = productRepository.save(createEntity(request));
+        notificationService.notifyNewProduct(product);
+        return mapper.toDTO(product);
     }
 
     @Override

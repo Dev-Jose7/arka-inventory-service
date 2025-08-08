@@ -8,6 +8,7 @@ import com.arka.inventory_service.mapper.EntityToDTOMapper;
 import com.arka.inventory_service.model.ProductVariant;
 import com.arka.inventory_service.model.Stock;
 import com.arka.inventory_service.model.Warehouse;
+import com.arka.inventory_service.notification.NotificationService;
 import com.arka.inventory_service.repository.ProductVariantRepository;
 import com.arka.inventory_service.repository.StockRepository;
 import com.arka.inventory_service.repository.WarehouseRepository;
@@ -26,10 +27,13 @@ public class StockServiceImpl implements IStockService {
     private final ProductVariantRepository productVariantRepository;
     private final WarehouseRepository warehouseRepository;
     private final EntityToDTOMapper mapper;
+    private final NotificationService notificationService;
 
     @Override
     public StockResponseDTO createStock(StockRequestDTO request) {
-        return mapper.toDTO(createEntity(request));
+        Stock stock = stockRepository.save(createEntity(request));
+        notificationService.notifyStockEntry(stock);
+        return mapper.toDTO(stock);
     }
 
     @Override
@@ -65,7 +69,7 @@ public class StockServiceImpl implements IStockService {
         stock.setWarehouse(warehouse);
         stock.setStock(request.getStock());
 
-        return stockRepository.save(stock);
+        return stock;
     }
 
     private Stock getStockByIdOrException(UUID id) {
