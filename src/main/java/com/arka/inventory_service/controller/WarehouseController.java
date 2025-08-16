@@ -1,6 +1,7 @@
 package com.arka.inventory_service.controller;
 
 import com.arka.inventory_service.dto.request.WarehouseRequestDTO;
+import com.arka.inventory_service.dto.request.WarehouseUpdateRequestDTO;
 import com.arka.inventory_service.dto.response.WarehouseResponseDTO;
 import com.arka.inventory_service.service.IWarehouseService;
 import jakarta.validation.Valid;
@@ -52,6 +53,12 @@ public class WarehouseController {
     @GetMapping
     public ResponseEntity<List<WarehouseResponseDTO>> getAllWarehouses() {
         List<WarehouseResponseDTO> response = warehouseService.getAllWarehouses();
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<WarehouseResponseDTO> updateWarehouse(@PathVariable UUID id, @Valid @RequestBody WarehouseUpdateRequestDTO request) {
+        WarehouseResponseDTO response = warehouseService.updateWarehouse(id, request);
         return ResponseEntity.ok(response);
     }
 }

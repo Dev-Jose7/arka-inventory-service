@@ -11,4 +11,5 @@ public interface IBrandService {
     BrandResponseDTO getBrandById(UUID id);
     BrandResponseDTO getBrandByName(String name);
     List<BrandResponseDTO> getAllBrands();
+    BrandResponseDTO updateBrand(UUID id, BrandRequestDTO request);
 }

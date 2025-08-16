@@ -1,7 +1,9 @@
 package com.arka.inventory_service.service;
 
 import com.arka.inventory_service.dto.request.ProductRequestDTO;
+import com.arka.inventory_service.dto.request.ProductUpdateRequestDTO;
 import com.arka.inventory_service.dto.response.ProductResponseDTO;
+import com.arka.inventory_service.model.Product;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,4 +14,5 @@ public interface IProductService {
     List<ProductResponseDTO> getProductsByName(String name);
     List<ProductResponseDTO> getProductByBrandId(UUID brandId);
     List<ProductResponseDTO> getProductByCategoryId(UUID categoryId);
+    ProductResponseDTO updateProduct(UUID id, ProductUpdateRequestDTO request);
 }

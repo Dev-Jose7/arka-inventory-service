@@ -1,6 +1,7 @@
 package com.arka.inventory_service.service;
 
 import com.arka.inventory_service.dto.request.CurrencyRequestDTO;
+import com.arka.inventory_service.dto.request.CurrencyUpdateRequestDTO;
 import com.arka.inventory_service.dto.response.CurrencyResponseDTO;
 
 import java.util.Currency;
@@ -14,4 +15,5 @@ public interface ICurrencyService {
     CurrencyResponseDTO getCurrencyByName(String name);
     List<CurrencyResponseDTO> getCurrenciesBySymbol(String symbol);
     List<CurrencyResponseDTO> getAllCurrencies();
+    CurrencyResponseDTO updateCurrency(UUID id, CurrencyUpdateRequestDTO request);
 }

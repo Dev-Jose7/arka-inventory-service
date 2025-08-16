@@ -81,4 +81,20 @@ public class OpenApiConfig {
                 .pathsToMatch("/api/stocks/**")
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi stockMovementApi() {
+        return GroupedOpenApi.builder()
+                .group("stockMovements")
+                .pathsToMatch("/api/stock-movements/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi stockReservationApi() {
+        return GroupedOpenApi.builder()
+                .group("stockReservations")
+                .pathsToMatch("/api/stock-reservations/**")
+                .build();
+    }
 }

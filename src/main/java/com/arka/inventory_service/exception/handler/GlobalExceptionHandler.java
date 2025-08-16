@@ -1,10 +1,7 @@
 package com.arka.inventory_service.exception.handler;
 
 import com.arka.inventory_service.dto.response.ErrorResponseDTO;
-import com.arka.inventory_service.exception.EmailSendException;
-import com.arka.inventory_service.exception.InvalidTypeException;
-import com.arka.inventory_service.exception.ResourceAlreadyExistsException;
-import com.arka.inventory_service.exception.ResourceNotFoundException;
+import com.arka.inventory_service.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -49,6 +46,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleEmailSend(EmailSendException ex,
                                                             HttpServletRequest request) {
         return createResponse(ex, HttpStatus.CONFLICT, request.getRequestURI());
+    }
+
+    public ResponseEntity<ErrorResponseDTO> handleStockNotAvailable(StockNotAvailableException ex,
+                                                                    HttpServletRequest request) {
+        return createResponse(ex, HttpStatus.NOT_FOUND, request.getRequestURI());
     }
 
     @ExceptionHandler(Exception.class)

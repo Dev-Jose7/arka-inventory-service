@@ -42,4 +42,11 @@ public class BrandController {
         List<BrandResponseDTO> response = brandService.getAllBrands();
         return ResponseEntity.ok(response);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<BrandResponseDTO> updateBrand(@PathVariable UUID id, @Valid @RequestBody BrandRequestDTO request) {
+        BrandResponseDTO response = brandService.updateBrand(id, request);
+        return ResponseEntity.ok(response);
+    }
+
 }

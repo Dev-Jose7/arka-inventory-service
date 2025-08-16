@@ -38,7 +38,7 @@ public class Stock {
     private Warehouse warehouse;
 
     @Column(nullable = false)
-    private Integer stock;
+    private Integer unit;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

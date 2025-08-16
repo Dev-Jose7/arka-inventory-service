@@ -1,6 +1,7 @@
 package com.arka.inventory_service.service.impl;
 
 import com.arka.inventory_service.dto.request.CurrencyRequestDTO;
+import com.arka.inventory_service.dto.request.CurrencyUpdateRequestDTO;
 import com.arka.inventory_service.dto.response.CurrencyResponseDTO;
 import com.arka.inventory_service.exception.ResourceAlreadyExistsException;
 import com.arka.inventory_service.exception.ResourceNotFoundException;
@@ -8,6 +9,7 @@ import com.arka.inventory_service.mapper.EntityToDTOMapper;
 import com.arka.inventory_service.model.Currency;
 import com.arka.inventory_service.repository.CurrencyRepository;
 import com.arka.inventory_service.service.ICurrencyService;
+import com.arka.inventory_service.util.ValidationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +57,12 @@ public class CurrencyServiceImpl implements ICurrencyService {
         return createResponseList(currencyRepository.findAll());
     }
 
-    // --- Private utilitarian methods ---
+    @Override
+    public CurrencyResponseDTO updateCurrency(UUID id, CurrencyUpdateRequestDTO request) {
+        return mapper.toDTO(updateEntity(id, request));
+    }
+
+    // --- Private utility methods ---
 
     private Currency createEntity(CurrencyRequestDTO request) {
         validateUnique(request.getName(), request.getCode());
@@ -68,17 +75,46 @@ public class CurrencyServiceImpl implements ICurrencyService {
         return currencyRepository.save(currency);
     }
 
+    private Currency updateEntity(UUID id, CurrencyUpdateRequestDTO request) {
+        Currency currency = getCurrencyByIdOrException(id);
+
+        if (ValidationUtil.isValid(request.getName(), currency.getName())) {
+            validateNameUnique(request.getName());
+            currency.setName(request.getName());
+        }
+
+        if (ValidationUtil.isValid(request.getCode(), currency.getCode())) {
+            validateCodeUnique(request.getCode());
+            currency.setCode(request.getCode());
+        }
+
+        if (ValidationUtil.isValid(request.getSymbol(), currency.getSymbol())) {
+            currency.setSymbol(request.getSymbol());
+        }
+
+        return currencyRepository.save(currency);
+    }
+
     private Currency getCurrencyByIdOrException(UUID id) {
         return currencyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Currency not found."));
     }
 
     private void validateUnique(String name, String code) {
-        boolean existsByName = currencyRepository.existsByNameIgnoreCase(name);
-        boolean existsByCode = currencyRepository.existsByCodeIgnoreCase(code);
+        validateNameUnique(name);
+        validateCodeUnique(code);
+    }
 
-        if (existsByName) throw new ResourceAlreadyExistsException("Currency name already exists.");
-        if (existsByCode) throw new ResourceAlreadyExistsException("Currency code already exists.");
+    private void validateNameUnique(String name) {
+        if (currencyRepository.existsByNameIgnoreCase(name)) {
+            throw new ResourceAlreadyExistsException("Currency name already exists.");
+        }
+    }
+
+    private void validateCodeUnique(String code) {
+        if (currencyRepository.existsByCodeIgnoreCase(code)) {
+            throw new ResourceAlreadyExistsException("Currency code already exists.");
+        }
     }
 
     private List<CurrencyResponseDTO> createResponseList(List<Currency> currencies) {

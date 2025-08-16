@@ -1,6 +1,7 @@
 package com.arka.inventory_service.controller;
 
 import com.arka.inventory_service.dto.request.CategoryRequestDTO;
+import com.arka.inventory_service.dto.request.CategoryUpdateRequestDTO;
 import com.arka.inventory_service.dto.response.CategoryResponseDTO;
 import com.arka.inventory_service.service.ICategoryService;
 import jakarta.validation.Valid;
@@ -40,6 +41,12 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<List<CategoryResponseDTO>> getAllCategories() {
         List<CategoryResponseDTO> response = categoryService.getAllCategories();
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable UUID id, @Valid @RequestBody CategoryUpdateRequestDTO request) {
+        CategoryResponseDTO response = categoryService.updateCategory(id, request);
         return ResponseEntity.ok(response);
     }
 }

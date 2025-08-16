@@ -1,6 +1,7 @@
 package com.arka.inventory_service.controller;
 
 import com.arka.inventory_service.dto.request.ProductVariantRequestDTO;
+import com.arka.inventory_service.dto.request.ProductVariantUpdateRequestDTO;
 import com.arka.inventory_service.dto.response.ProductVariantResponseDTO;
 import com.arka.inventory_service.service.IProductVariantService;
 import jakarta.validation.Valid;
@@ -60,6 +61,12 @@ public class ProductVariantController {
     @GetMapping("/price")
     public ResponseEntity<List<ProductVariantResponseDTO>> getVariantsByPrice(@RequestParam BigDecimal price) {
         List<ProductVariantResponseDTO> response = productVariantService.getProductsVariantByPrice(price);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ProductVariantResponseDTO> updateProductVariant(@PathVariable UUID id, @Valid @RequestBody ProductVariantUpdateRequestDTO request) {
+        ProductVariantResponseDTO response = productVariantService.updateProductVariant(id, request);
         return ResponseEntity.ok(response);
     }
 }

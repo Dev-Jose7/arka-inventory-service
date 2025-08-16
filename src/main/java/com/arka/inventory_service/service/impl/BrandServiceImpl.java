@@ -8,6 +8,7 @@ import com.arka.inventory_service.mapper.EntityToDTOMapper;
 import com.arka.inventory_service.model.Brand;
 import com.arka.inventory_service.repository.BrandRepository;
 import com.arka.inventory_service.service.IBrandService;
+import com.arka.inventory_service.util.ValidationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,13 +45,29 @@ public class BrandServiceImpl implements IBrandService {
         return createResponseList(brandRepository.findAll());
     }
 
-    // --- Private utilitarian methods ---
+    @Override
+    public BrandResponseDTO updateBrand(UUID id, BrandRequestDTO request) {
+        return mapper.toDTO(updateEntity(id, request));
+    }
+
+    // --- Private utility methods ---
 
     private Brand createEntity(BrandRequestDTO request) {
         validateUnique(request.getName());
 
         Brand brand = new Brand();
         brand.setName(request.getName());
+
+        return brandRepository.save(brand);
+    }
+
+    private Brand updateEntity(UUID id, BrandRequestDTO request) {
+        Brand brand = getBrandByIdOrException(id);
+
+        if (ValidationUtil.isValid(request.getName(), brand.getName())) {
+            validateUnique(request.getName());
+            brand.setName(request.getName());
+        }
 
         return brandRepository.save(brand);
     }

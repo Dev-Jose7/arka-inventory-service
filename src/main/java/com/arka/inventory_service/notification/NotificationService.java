@@ -43,7 +43,7 @@ public class NotificationService {
                 "arka_inventory_service_test@gmail.com",
                 stock.getProductVariant().getName(),
                 stock.getProductVariant().getSku(),
-                stock.getStock(),
+                stock.getUnit(),
                 stock.getWarehouse().getName()
         );
     }

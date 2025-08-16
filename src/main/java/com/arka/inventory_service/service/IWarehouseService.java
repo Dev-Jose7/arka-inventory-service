@@ -1,6 +1,7 @@
 package com.arka.inventory_service.service;
 
 import com.arka.inventory_service.dto.request.WarehouseRequestDTO;
+import com.arka.inventory_service.dto.request.WarehouseUpdateRequestDTO;
 import com.arka.inventory_service.dto.response.WarehouseResponseDTO;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public interface IWarehouseService {
     List<WarehouseResponseDTO> getWarehouseByLocation(String location);
     List<WarehouseResponseDTO> getWarehouseByCountry(UUID id);
     List<WarehouseResponseDTO> getAllWarehouses();
+    WarehouseResponseDTO updateWarehouse(UUID id, WarehouseUpdateRequestDTO request);
 }

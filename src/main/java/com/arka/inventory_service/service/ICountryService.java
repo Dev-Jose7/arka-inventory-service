@@ -11,4 +11,5 @@ public interface ICountryService {
     CountryResponseDTO getCountryById(UUID id);
     CountryResponseDTO getCountryByName(String name);
     List<CountryResponseDTO> getAllCountries();
+    CountryResponseDTO updateCountry(UUID id, CountryRequestDTO request);
 }

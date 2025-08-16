@@ -42,4 +42,10 @@ public class CountryController {
         List<CountryResponseDTO> response = countryService.getAllCountries();
         return ResponseEntity.ok(response);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CountryResponseDTO> updateCountry(@PathVariable UUID id, @Valid @RequestBody CountryRequestDTO request) {
+        CountryResponseDTO response = countryService.updateCountry(id, request);
+        return ResponseEntity.ok(response);
+    }
 }

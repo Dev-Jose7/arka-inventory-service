@@ -70,7 +70,7 @@ CREATE TABLE product_variant (
 
     INDEX idx_product_id (product_id),
 
-    UNIQUE KEY uk_variant_name_product (name, product_id),
+    UNIQUE KEY uk_variant_name_product (name, product_id), -- AÑADIR UNICIDAD POR CURRENCY TAMBIÉN
     FOREIGN KEY (product_id) REFERENCES product(id),
     FOREIGN KEY (currency_id) REFERENCES currency(id)
 );
@@ -91,13 +91,29 @@ CREATE TABLE stock (
 CREATE TABLE stock_movement (
     id CHAR(36) PRIMARY KEY,
     stock_id CHAR(36) NOT NULL,
-    type VARCHAR(20) NOT NULL,
+    type ENUM('IN', 'OUT', 'TRANSFER', 'ADJUST', 'RESERVED', 'RELEASED') NOT NULL,
     quantity INT NOT NULL,
     description TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     FOREIGN KEY (stock_id) REFERENCES stock(id)
+);
+
+CREATE TABLE stock_reservation (
+    id CHAR(36) PRIMARY KEY,
+    cart_id CHAR(36) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    status ENUM('ACTIVE', 'EXPIRED', 'COMPLETED') NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    CONSTRAINT fk_stock_movement_reservation
+        FOREIGN KEY (id) REFERENCES stock_movement(id)
+        ON DELETE CASCADE,
+        
+	INDEX idx_reservation_status (status),
+    INDEX idx_reservation_expiry (expires_at)
 );
 
 CREATE TABLE stock_threshold (

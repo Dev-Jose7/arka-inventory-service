@@ -1,6 +1,7 @@
 package com.arka.inventory_service.service;
 
 import com.arka.inventory_service.dto.request.ProductVariantRequestDTO;
+import com.arka.inventory_service.dto.request.ProductVariantUpdateRequestDTO;
 import com.arka.inventory_service.dto.response.ProductVariantResponseDTO;
 import com.arka.inventory_service.model.ProductVariant;
 
@@ -16,4 +17,5 @@ public interface IProductVariantService {
     List<ProductVariantResponseDTO> getProductsVariantByProductId(UUID productId);
     List<ProductVariantResponseDTO> getProductsVariantByCurrencyId(UUID currencyId);
     List<ProductVariantResponseDTO> getProductsVariantByPrice(BigDecimal price);
+    ProductVariantResponseDTO updateProductVariant(UUID id, ProductVariantUpdateRequestDTO request);
 }

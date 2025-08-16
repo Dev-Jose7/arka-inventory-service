@@ -1,5 +1,6 @@
 package com.arka.inventory_service.dto.request;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class StockRequestDTO {
     @NotNull(message = "Warehouse variant is required.")
     private UUID warehouseId;
 
+    @Min(0)
     @NotNull(message = "Stock is required.")
     private Integer stock;
 }

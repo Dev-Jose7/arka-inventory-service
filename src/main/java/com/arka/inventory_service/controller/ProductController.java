@@ -1,6 +1,7 @@
 package com.arka.inventory_service.controller;
 
 import com.arka.inventory_service.dto.request.ProductRequestDTO;
+import com.arka.inventory_service.dto.request.ProductUpdateRequestDTO;
 import com.arka.inventory_service.dto.response.ProductResponseDTO;
 import com.arka.inventory_service.service.IProductService;
 import jakarta.validation.Valid;
@@ -46,6 +47,12 @@ public class ProductController {
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<List<ProductResponseDTO>> getProductsByCategory(@PathVariable UUID categoryId) {
         List<ProductResponseDTO> response = productService.getProductByCategoryId(categoryId);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable UUID id, @Valid @RequestBody ProductUpdateRequestDTO request) {
+        ProductResponseDTO response = productService.updateProduct(id, request);
         return ResponseEntity.ok(response);
     }
 }

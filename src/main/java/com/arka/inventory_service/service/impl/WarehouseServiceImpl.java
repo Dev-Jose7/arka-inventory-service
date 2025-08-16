@@ -1,6 +1,7 @@
 package com.arka.inventory_service.service.impl;
 
 import com.arka.inventory_service.dto.request.WarehouseRequestDTO;
+import com.arka.inventory_service.dto.request.WarehouseUpdateRequestDTO;
 import com.arka.inventory_service.dto.response.WarehouseResponseDTO;
 import com.arka.inventory_service.exception.ResourceAlreadyExistsException;
 import com.arka.inventory_service.exception.ResourceNotFoundException;
@@ -10,6 +11,7 @@ import com.arka.inventory_service.model.Warehouse;
 import com.arka.inventory_service.repository.CountryRepository;
 import com.arka.inventory_service.repository.WarehouseRepository;
 import com.arka.inventory_service.service.IWarehouseService;
+import com.arka.inventory_service.util.ValidationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +58,12 @@ public class WarehouseServiceImpl implements IWarehouseService {
         return createResponseList(warehouseRepository.findAll());
     }
 
-    // --- Private utilitarian methods ---
+    @Override
+    public WarehouseResponseDTO updateWarehouse(UUID id, WarehouseUpdateRequestDTO request) {
+        return mapper.toDTO(updateEntity(id, request));
+    }
+
+    // --- Private utility methods ---
 
     private Warehouse createEntity(WarehouseRequestDTO request) {
         validateUnique(request.getName());
@@ -67,6 +74,24 @@ public class WarehouseServiceImpl implements IWarehouseService {
         warehouse.setName(request.getName());
         warehouse.setLocation(request.getLocation());
         warehouse.setCountry(country);
+
+        return warehouseRepository.save(warehouse);
+    }
+
+    private Warehouse updateEntity(UUID id, WarehouseUpdateRequestDTO request) {
+        Warehouse warehouse = getWarehouseByIdOrException(id);
+
+        if (ValidationUtil.isValid(request.getName(), warehouse.getName())) {
+            validateUnique(request.getName());
+            warehouse.setName(request.getName());
+        }
+
+        if (ValidationUtil.isValid(request.getLocation(), warehouse.getLocation())) warehouse.setLocation(request.getLocation());
+
+        if (ValidationUtil.isValid(request.getCountryId(), warehouse.getCountry().getId())) {
+            Country country = getCountryByIdOrException(request.getCountryId());
+            warehouse.setCountry(country);
+        }
 
         return warehouseRepository.save(warehouse);
     }

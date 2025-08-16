@@ -8,6 +8,7 @@ import com.arka.inventory_service.mapper.EntityToDTOMapper;
 import com.arka.inventory_service.model.Country;
 import com.arka.inventory_service.repository.CountryRepository;
 import com.arka.inventory_service.service.ICountryService;
+import com.arka.inventory_service.util.ValidationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,13 +44,29 @@ public class CountryServiceImpl implements ICountryService {
         return createResponseList(countryRepository.findAll());
     }
 
-    // --- Private utilitarian methods ---
+    @Override
+    public CountryResponseDTO updateCountry(UUID id, CountryRequestDTO request) {
+        return mapper.toDTO(updateEntity(id, request));
+    }
+
+    // --- Private utility methods ---
 
     private Country createEntity(CountryRequestDTO request) {
         validateUnique(request.getName());
 
         Country country = new Country();
         country.setName(request.getName());
+
+        return countryRepository.save(country);
+    }
+
+    private Country updateEntity(UUID id, CountryRequestDTO request) {
+        Country country = getCountryByIdOrException(id);
+
+        if (ValidationUtil.isValid(request.getName(), country.getName())) {
+            validateUnique(request.getName());
+            country.setName(request.getName());
+        }
 
         return countryRepository.save(country);
     }

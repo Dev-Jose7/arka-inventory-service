@@ -1,6 +1,7 @@
 package com.arka.inventory_service.service.impl;
 
 import com.arka.inventory_service.dto.request.CategoryRequestDTO;
+import com.arka.inventory_service.dto.request.CategoryUpdateRequestDTO;
 import com.arka.inventory_service.dto.response.CategoryResponseDTO;
 import com.arka.inventory_service.exception.ResourceAlreadyExistsException;
 import com.arka.inventory_service.exception.ResourceNotFoundException;
@@ -8,6 +9,7 @@ import com.arka.inventory_service.mapper.EntityToDTOMapper;
 import com.arka.inventory_service.model.Category;
 import com.arka.inventory_service.repository.CategoryRepository;
 import com.arka.inventory_service.service.ICategoryService;
+import com.arka.inventory_service.util.ValidationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +46,12 @@ public class CategoryServiceImpl implements ICategoryService {
         return createResponseList(categoryRepository.findAll());
     }
 
-    // --- Private utilitarian methods ---
+    @Override
+    public CategoryResponseDTO updateCategory(UUID id, CategoryUpdateRequestDTO request) {
+        return mapper.toDTO(updateEntity(id, request));
+    }
+
+    // --- Private utility methods ---
 
     private Category createEntity(CategoryRequestDTO request) {
         validateUnique(request.getName());
@@ -52,6 +59,19 @@ public class CategoryServiceImpl implements ICategoryService {
         Category category = new Category();
         category.setName(request.getName());
         category.setDescription(request.getDescription());
+
+        return categoryRepository.save(category);
+    }
+
+    private Category updateEntity(UUID id, CategoryUpdateRequestDTO request) {
+        Category category = getCategoryByIdOrException(id);
+
+        if (ValidationUtil.isValid(request.getName(), category.getName())) {
+            validateUnique(request.getName());
+            category.setName(request.getName());
+        }
+
+        if (ValidationUtil.isValid(request.getDescription(), category.getDescription())) category.setDescription(request.getDescription());
 
         return categoryRepository.save(category);
     }

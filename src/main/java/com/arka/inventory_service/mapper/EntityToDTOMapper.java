@@ -4,6 +4,8 @@ import com.arka.inventory_service.dto.response.*;
 import com.arka.inventory_service.model.*;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 public class EntityToDTOMapper {
 
@@ -69,9 +71,42 @@ public class EntityToDTOMapper {
     public StockResponseDTO toDTO(Stock stock) {
         return new StockResponseDTO(
                 stock.getId(),
-                stock.getStock(),
+                stock.getUnit(),
                 toDTO(stock.getProductVariant()),
                 toDTO(stock.getWarehouse())
         );
+    }
+
+    public StockMovementResponseDTO toDTO(StockMovement stockMovement) {
+        return new StockMovementResponseDTO(
+                stockMovement.getId(),
+                stockMovement.getType(),
+                stockMovement.getQuantity(),
+                stockMovement.getDescription(),
+                toDTO(stockMovement.getStock())
+        );
+    }
+
+    public StockReservationResponseDTO toDTO(StockReservation stockReservation) {
+        return new StockReservationResponseDTO(
+                stockReservation.getId(),
+                toDTO(stockReservation.getStockMovement()),
+                stockReservation.getCartId(),
+                stockReservation.getExpiresAt(),
+                stockReservation.getStatus()
+        );
+    }
+
+    public StockByCheckoutResponseDTO toDTO(Stock stock, StockReservation stockReservation) {
+        return new StockByCheckoutResponseDTO(
+                stock.getId(),
+                stockReservation.getStockMovement().getQuantity(),
+                stock.getProductVariant().getPrice().multiply(
+                        BigDecimal.valueOf(stockReservation.getStockMovement().getQuantity())
+                ),
+                toDTO(stock.getWarehouse()),
+                toDTO(stock.getProductVariant())
+        );
+
     }
 }

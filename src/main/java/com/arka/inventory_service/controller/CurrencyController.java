@@ -1,6 +1,7 @@
 package com.arka.inventory_service.controller;
 
 import com.arka.inventory_service.dto.request.CurrencyRequestDTO;
+import com.arka.inventory_service.dto.request.CurrencyUpdateRequestDTO;
 import com.arka.inventory_service.dto.response.CurrencyResponseDTO;
 import com.arka.inventory_service.service.ICurrencyService;
 import jakarta.validation.Valid;
@@ -52,6 +53,12 @@ public class CurrencyController {
     @GetMapping
     public ResponseEntity<List<CurrencyResponseDTO>> getAllCurrencies() {
         List<CurrencyResponseDTO> response = currencyService.getAllCurrencies();
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CurrencyResponseDTO> updateCurrency(@PathVariable UUID id, @Valid @RequestBody CurrencyUpdateRequestDTO request) {
+        CurrencyResponseDTO response = currencyService.updateCurrency(id, request);
         return ResponseEntity.ok(response);
     }
 }
