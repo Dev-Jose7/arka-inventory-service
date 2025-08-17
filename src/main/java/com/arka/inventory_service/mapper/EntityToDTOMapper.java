@@ -107,6 +107,13 @@ public class EntityToDTOMapper {
                 toDTO(stock.getWarehouse()),
                 toDTO(stock.getProductVariant())
         );
+    }
 
+    public StockThresholdResponseDTO toDTO(StockThreshold stockThreshold) {
+        return new StockThresholdResponseDTO(
+                stockThreshold.getId(),
+                stockThreshold.getMinimumQuantity(),
+                toDTO(stockThreshold.getStock())
+        );
     }
 }

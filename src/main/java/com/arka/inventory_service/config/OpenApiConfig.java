@@ -97,4 +97,12 @@ public class OpenApiConfig {
                 .pathsToMatch("/api/stock-reservations/**")
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi stockThresholdApi() {
+        return GroupedOpenApi.builder()
+                .group("stockThresholds")
+                .pathsToMatch("/api/stock-thresholds/**")
+                .build();
+    }
 }
